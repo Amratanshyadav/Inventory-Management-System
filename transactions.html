@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Stock | Inventory Logs</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            slate: {
+              850: '#f1f5f9',
+              950: '#ffffff'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-full antialiased flex flex-col md:flex-row">
+
+  <!-- Sidebar Layout -->
+  <aside class="w-full md:w-72 bg-white border-r border-slate-200 flex flex-col justify-between p-6 shrink-0 md:h-screen sticky top-0 z-40">
+    <div class="flex flex-col gap-8">
+      <!-- Logo -->
+      <div class="flex items-center gap-3 px-2">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-600/30">
+          <i data-lucide="boxes" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-slate-800 text-lg leading-tight tracking-wide">APEX STOCK</h1>
+          <span class="text-[10px] font-bold text-indigo-600 tracking-widest uppercase">LOCAL SANDBOX v2.0</span>
+        </div>
+      </div>
+
+      <!-- Navigation Link Items -->
+      <nav class="flex flex-col gap-1.5" id="sidebar-nav">
+        <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="products.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+          <i data-lucide="package" class="w-5 h-5"></i>
+          <span>Products</span>
+        </a>
+        <!-- Active Link -->
+        <a href="transactions.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 bg-indigo-600 text-white shadow-lg shadow-indigo-600/10 font-medium">
+          <i data-lucide="arrow-up-down" class="w-5 h-5"></i>
+          <span>Inventory Logs</span>
+        </a>
+        <a href="suppliers.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+          <i data-lucide="truck" class="w-5 h-5"></i>
+          <span>Suppliers</span>
+        </a>
+        <a href="warehouses.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+          <i data-lucide="warehouse" class="w-5 h-5"></i>
+          <span>Warehouses</span>
+        </a>
+        <a href="reports.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+          <i data-lucide="file-spreadsheet" class="w-5 h-5"></i>
+          <span>Reports & Forecast</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- User profile card info -->
+    <div class="flex flex-col gap-4 border-t border-slate-200 pt-6 mt-6 md:mt-0">
+      <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
+        <div class="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20 text-indigo-600">
+          <i data-lucide="user-check" class="w-5 h-5"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h4 class="text-sm font-semibold text-slate-700 truncate leading-snug">Demo Administrator</h4>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="text-xs text-slate-500 font-medium">Local Live Server</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main View Area -->
+  <main class="flex-1 p-4 md:p-8 lg:p-10 overflow-y-auto h-screen w-full">
+    <div class="max-w-7xl mx-auto space-y-8 animate-fade-in">
+      <div>
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight">Stock Logistics</h2>
+        <p class="text-sm text-slate-500 mt-1">Perform inventory Stock-In or Stock-Out, allocate items to warehouses, and inspect the ledger.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <!-- Left: Stock Form -->
+        <div class="lg:col-span-1 glass-panel p-6 rounded-2xl shadow-xl space-y-6">
+          <div>
+            <h3 class="font-bold text-slate-700 text-base">Stock Adjustment</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Log a new incoming shipment or issue stock out of inventory.</p>
+          </div>
+
+          <form id="tx-form" onsubmit="handleTransactionSubmit(event)" class="space-y-5">
+            <!-- Direction toggle -->
+            <div class="space-y-2">
+              <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Transaction Type</label>
+              <div class="grid grid-cols-2 gap-3 bg-slate-50 p-1 rounded-xl border border-slate-200">
+                <button type="button" id="tx-btn-in" onclick="setTxDirection('STOCK_IN')" class="flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow-md">
+                  <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                  <span>Stock In</span>
+                </button>
+                <button type="button" id="tx-btn-out" onclick="setTxDirection('STOCK_OUT')" class="flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-bold transition-all text-slate-500 hover:text-slate-800">
+                  <i data-lucide="minus-circle" class="w-4 h-4"></i>
+                  <span>Stock Out</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Product Select -->
+            <div class="space-y-2">
+              <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Select Product *</label>
+              <select id="tx-product" required class="w-full px-4 py-3 bg-white border border-slate-200 focus:border-indigo-500 rounded-xl text-slate-700 text-sm focus:outline-none">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+
+            <!-- Warehouse Select -->
+            <div class="space-y-2">
+              <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Target Warehouse (Optional)</label>
+              <select id="tx-warehouse" class="w-full px-4 py-3 bg-white border border-slate-200 focus:border-indigo-500 rounded-xl text-slate-700 text-sm focus:outline-none">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+
+            <!-- Quantity -->
+            <div class="space-y-2">
+              <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Quantity *</label>
+              <input type="number" id="tx-qty" min="1" required value="1" class="w-full px-4 py-3 bg-white border border-slate-200 focus:border-indigo-500 rounded-xl text-slate-800 text-sm focus:outline-none">
+            </div>
+
+            <!-- Reason -->
+            <div class="space-y-2">
+              <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Reason / Memo</label>
+              <input type="text" id="tx-reason" placeholder="e.g. Purchase Order, Sales Dispatch" class="w-full px-4 py-3 bg-white border border-slate-200 focus:border-indigo-500 rounded-xl text-slate-800 text-sm focus:outline-none">
+            </div>
+
+            <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all shadow-md">
+              Commit Transaction
+            </button>
+          </form>
+        </div>
+
+        <!-- Right: Full Ledger -->
+        <div class="lg:col-span-2 glass-panel p-6 rounded-2xl shadow-xl space-y-6">
+          <div>
+            <h3 class="font-bold text-slate-700 text-base">Operational Ledger</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Comprehensive auditable transaction logs.</p>
+          </div>
+
+          <div class="overflow-x-auto rounded-xl border border-slate-200">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-100 text-slate-600 font-semibold border-b border-slate-200">
+                  <th class="p-3">Timestamp</th>
+                  <th class="p-3">Type</th>
+                  <th class="p-3">Product Details</th>
+                  <th class="p-3 text-right">Quantity</th>
+                  <th class="p-3">Warehouse</th>
+                  <th class="p-3">Reason</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200/50" id="ledger-table-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Database and Page specific controllers -->
+  <script src="js/db.js"></script>
+  <script src="js/transactions.js"></script>
+</body>
+</html>

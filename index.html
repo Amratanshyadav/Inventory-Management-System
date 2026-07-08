@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Stock | Dashboard</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            slate: {
+              850: '#f1f5f9',
+              950: '#ffffff'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-full antialiased flex flex-col md:flex-row">
+
+  <!-- Sidebar Layout -->
+  <aside class="w-full md:w-72 bg-white border-r border-slate-200 flex flex-col justify-between p-6 shrink-0 md:h-screen sticky top-0 z-40">
+    <div class="flex flex-col gap-8">
+      <!-- Logo -->
+      <div class="flex items-center gap-3 px-2">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-600/30">
+          <i data-lucide="boxes" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-slate-800 text-lg leading-tight tracking-wide">APEX STOCK</h1>
+          <span class="text-[10px] font-bold text-indigo-600 tracking-widest uppercase">LOCAL SANDBOX v2.0</span>
+        </div>
+      </div>
+
+      <!-- Navigation Link Items -->
+      <nav class="flex flex-col gap-1.5" id="sidebar-nav">
+        <!-- Active Link -->
+        <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 bg-indigo-600 text-white shadow-lg shadow-indigo-600/10 font-medium">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="products.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+          <i data-lucide="package" class="w-5 h-5"></i>
+          <span>Products</span>
+        </a>
+        <a href="transactions.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+          <i data-lucide="arrow-up-down" class="w-5 h-5"></i>
+          <span>Inventory Logs</span>
+        </a>
+        <a href="suppliers.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+          <i data-lucide="truck" class="w-5 h-5"></i>
+          <span>Suppliers</span>
+        </a>
+        <a href="warehouses.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+          <i data-lucide="warehouse" class="w-5 h-5"></i>
+          <span>Warehouses</span>
+        </a>
+        <a href="reports.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+          <i data-lucide="file-spreadsheet" class="w-5 h-5"></i>
+          <span>Reports & Forecast</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- User profile card info -->
+    <div class="flex flex-col gap-4 border-t border-slate-200 pt-6 mt-6 md:mt-0">
+      <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
+        <div class="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20 text-indigo-600">
+          <i data-lucide="user-check" class="w-5 h-5"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h4 class="text-sm font-semibold text-slate-700 truncate leading-snug">Demo Administrator</h4>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="text-xs text-slate-500 font-medium">Local Live Server</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main View Area -->
+  <main class="flex-1 p-4 md:p-8 lg:p-10 overflow-y-auto h-screen w-full">
+    <div class="max-w-7xl mx-auto space-y-8 animate-fade-in">
+      
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight">Control Panel</h2>
+          <p class="text-sm text-slate-500 mt-1">Real-time operations summary and warehouse stock monitoring.</p>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+        <!-- Products -->
+        <div class="glass-panel p-6 rounded-2xl shadow-sm flex flex-col justify-between">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Products</span>
+              <h3 id="stat-products" class="text-3xl font-black text-slate-800 mt-2 tracking-tight">0</h3>
+            </div>
+            <div class="p-3 rounded-xl bg-indigo-500/10 text-indigo-600"><i data-lucide="boxes" class="w-5 h-5"></i></div>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-4">Active catalog items</p>
+        </div>
+        <!-- Stock -->
+        <div class="glass-panel p-6 rounded-2xl shadow-sm flex flex-col justify-between">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Warehouse Stock</span>
+              <h3 id="stat-stock" class="text-3xl font-black text-slate-800 mt-2 tracking-tight">0</h3>
+            </div>
+            <div class="p-3 rounded-xl bg-indigo-500/10 text-indigo-600"><i data-lucide="package-check" class="w-5 h-5"></i></div>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-4">Total physical units</p>
+        </div>
+        <!-- Low Stock -->
+        <div class="glass-panel p-6 rounded-2xl shadow-sm flex flex-col justify-between border-slate-200" id="stat-low-stock-card">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Low Stock Alerts</span>
+              <h3 id="stat-low-stock" class="text-3xl font-black text-slate-800 mt-2 tracking-tight">0</h3>
+            </div>
+            <div class="p-3 rounded-xl bg-rose-500/10 text-rose-500" id="stat-low-stock-icon"><i data-lucide="alert-triangle" class="w-5 h-5"></i></div>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-4">Safety limit status</p>
+        </div>
+        <!-- Capital Valuation -->
+        <div class="glass-panel p-6 rounded-2xl shadow-sm flex flex-col justify-between">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Capital Valuation</span>
+              <h3 id="stat-valuation" class="text-3xl font-black text-slate-800 mt-2 tracking-tight">$0</h3>
+            </div>
+            <div class="p-3 rounded-xl bg-indigo-500/10 text-indigo-600"><i data-lucide="circle-dollar-sign" class="w-5 h-5"></i></div>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-4">Asset market value</p>
+        </div>
+        <!-- Total Transactions -->
+        <div class="glass-panel p-6 rounded-2xl shadow-sm flex flex-col justify-between">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Operations Logged</span>
+              <h3 id="stat-transactions" class="text-3xl font-black text-slate-800 mt-2 tracking-tight">0</h3>
+            </div>
+            <div class="p-3 rounded-xl bg-indigo-500/10 text-indigo-600"><i data-lucide="clipboard-list" class="w-5 h-5"></i></div>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-4">Cumulative stock movements</p>
+        </div>
+      </div>
+
+      <!-- Charts & Alerts -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Chart -->
+        <div class="lg:col-span-2 glass-panel p-6 rounded-2xl shadow-sm flex flex-col justify-between">
+          <div class="mb-6">
+            <h3 class="font-bold text-slate-700 text-base">Weekly Stock Velocity</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Comparative analysis of inbound (Stock-In) vs outbound (Stock-Out) items.</p>
+          </div>
+          <div class="h-[300px] w-full relative">
+            <canvas id="stockVelocityChart"></canvas>
+          </div>
+        </div>
+        <!-- Low Stock Advisories -->
+        <div class="glass-panel p-6 rounded-2xl shadow-sm flex flex-col">
+          <div class="mb-6">
+            <h3 class="font-bold text-slate-700 text-base flex items-center gap-2">
+              <i data-lucide="alert-triangle" class="w-5 h-5 text-rose-500"></i>
+              <span>Low Stock Advisories</span>
+            </h3>
+            <p class="text-xs text-slate-500 mt-0.5">Products that have fallen below safety stock thresholds.</p>
+          </div>
+          <div class="flex-1 space-y-4 overflow-y-auto max-h-[300px] pr-1" id="dash-low-stock-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Operations Table -->
+      <div class="glass-panel p-6 rounded-2xl shadow-sm">
+        <div class="flex justify-between items-center mb-6">
+          <div>
+            <h3 class="font-bold text-slate-700 text-base">Recent Stock Operations</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Live ledger tracking the latest product additions and deductions.</p>
+          </div>
+        </div>
+        <div class="overflow-x-auto rounded-xl border border-slate-200">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr class="bg-slate-100 text-slate-600 font-semibold border-b border-slate-200">
+                <th class="p-4">Timestamp</th>
+                <th class="p-4">Action</th>
+                <th class="p-4">Product Details</th>
+                <th class="p-4 text-right">Quantity</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200/50" id="dash-recent-tx">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Database and Page specific controllers -->
+  <script src="js/db.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

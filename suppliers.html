@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Stock | Suppliers Registry</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            slate: {
+              850: '#f1f5f9',
+              950: '#ffffff'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-full antialiased flex flex-col md:flex-row">
+
+  <!-- Sidebar Layout -->
+  <aside class="w-full md:w-72 bg-white border-r border-slate-200 flex flex-col justify-between p-6 shrink-0 md:h-screen sticky top-0 z-40">
+    <div class="flex flex-col gap-8">
+      <!-- Logo -->
+      <div class="flex items-center gap-3 px-2">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-600/30">
+          <i data-lucide="boxes" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-slate-800 text-lg leading-tight tracking-wide">APEX STOCK</h1>
+          <span class="text-[10px] font-bold text-indigo-600 tracking-widest uppercase">LOCAL SANDBOX v2.0</span>
+        </div>
+      </div>
+
+      <!-- Navigation Link Items -->
+      <nav class="flex flex-col gap-1.5" id="sidebar-nav">
+        <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="products.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+          <i data-lucide="package" class="w-5 h-5"></i>
+          <span>Products</span>
+        </a>
+        <a href="transactions.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+          <i data-lucide="arrow-up-down" class="w-5 h-5"></i>
+          <span>Inventory Logs</span>
+        </a>
+        <!-- Active Link -->
+        <a href="suppliers.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 bg-indigo-600 text-white shadow-lg shadow-indigo-600/10 font-medium">
+          <i data-lucide="truck" class="w-5 h-5"></i>
+          <span>Suppliers</span>
+        </a>
+        <a href="warehouses.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+          <i data-lucide="warehouse" class="w-5 h-5"></i>
+          <span>Warehouses</span>
+        </a>
+        <a href="reports.html" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+          <i data-lucide="file-spreadsheet" class="w-5 h-5"></i>
+          <span>Reports & Forecast</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- User profile card info -->
+    <div class="flex flex-col gap-4 border-t border-slate-200 pt-6 mt-6 md:mt-0">
+      <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
+        <div class="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20 text-indigo-600">
+          <i data-lucide="user-check" class="w-5 h-5"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h4 class="text-sm font-semibold text-slate-700 truncate leading-snug">Demo Administrator</h4>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="text-xs text-slate-500 font-medium">Local Live Server</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main View Area -->
+  <main class="flex-1 p-4 md:p-8 lg:p-10 overflow-y-auto h-screen w-full">
+    <div class="max-w-7xl mx-auto space-y-8 animate-fade-in">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight">Suppliers Registry</h2>
+          <p class="text-sm text-slate-500 mt-1">Manage your product suppliers, manufacturing partners, and contact directories.</p>
+        </div>
+        <button onclick="openSupplierModal()" class="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-600/10 transition-colors self-start sm:self-auto">
+          <i data-lucide="plus" class="w-5 h-5"></i>
+          <span>Add Supplier</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="suppliers-grid">
+        <!-- Dynamically populated -->
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================== -->
+  <!-- MODALS -->
+  <!-- ========================================== -->
+
+  <!-- Add Supplier Modal -->
+  <div id="supplier-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm hidden animate-in fade-in duration-200">
+    <div class="w-full max-w-lg bg-white border border-slate-200 rounded-2xl shadow-2xl p-8 max-h-[90vh] overflow-y-auto space-y-6">
+      <div class="flex justify-between items-center pb-4 border-b border-slate-200">
+        <h3 class="text-lg font-bold text-slate-800">Register New Supplier</h3>
+        <button onclick="closeSupplierModal()" class="p-1.5 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-600 transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="supplier-form" onsubmit="handleSupplierSubmit(event)" class="space-y-5">
+        <div class="space-y-2">
+          <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Supplier Company Name *</label>
+          <input type="text" id="form-supplier-name" required placeholder="e.g. Acme Manufacturing Corp" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-xl text-slate-800 placeholder-slate-400 text-sm focus:outline-none transition-colors">
+        </div>
+        <div class="space-y-2">
+          <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Contact Person Name</label>
+          <input type="text" id="form-supplier-person" placeholder="e.g. Sarah Connor" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-xl text-slate-800 placeholder-slate-400 text-sm focus:outline-none transition-colors">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Email Address *</label>
+            <input type="email" id="form-supplier-email" required placeholder="sales@acme.com" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-xl text-slate-800 placeholder-slate-400 text-sm focus:outline-none transition-colors">
+          </div>
+          <div class="space-y-2">
+            <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Phone Number *</label>
+            <input type="text" id="form-supplier-phone" required placeholder="+1 (555) 0199" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-xl text-slate-800 placeholder-slate-400 text-sm focus:outline-none transition-colors">
+          </div>
+        </div>
+        <div class="space-y-2">
+          <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Office / Corporate Address</label>
+          <textarea id="form-supplier-address" placeholder="e.g. 100 Industrial Parkway, Austin, TX" rows="3" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-xl text-slate-800 placeholder-slate-400 text-sm focus:outline-none transition-colors resize-none"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
+          <button type="button" onclick="closeSupplierModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl border border-slate-200 transition-colors">Cancel</button>
+          <button type="submit" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-600/10 transition-all">Save Supplier</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Database and Page specific controllers -->
+  <script src="js/db.js"></script>
+  <script src="js/suppliers.js"></script>
+</body>
+</html>
